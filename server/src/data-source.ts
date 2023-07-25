@@ -5,6 +5,7 @@ import { User } from "./entities/User"
 import Work from "./entities/Work"
 import Study from "./entities/Study"
 import Like from "./entities/Like"
+import Membership from "./entities/Membership"
 
 
 
@@ -20,7 +21,7 @@ export const AppDataSource = new DataSource({
     //entities: [
        // "src/entities/**/*.ts"
     //],
-    entities:[Entity, User, Work, Study, Like,],
+    entities:[Entity, User, Work, Study, Like, Membership],
     migrations: [],
     subscribers: [],
 })

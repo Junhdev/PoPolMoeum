@@ -1,4 +1,3 @@
-
 import { Entity, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { User } from "./User";
 import BaseEntity from "./Entity";
