@@ -8,6 +8,9 @@ import Membership from './Membership';
 @Entity("studies")
 export default class Study extends BaseEntity{
 
+    @Index()
+    @Column({ nullable: true })
+    superuser_id: number;
   
     @Index()
     @Column({ nullable: true })
@@ -21,6 +24,9 @@ export default class Study extends BaseEntity{
     @Column({ type: 'text', nullable: true })
     description: string;
 
+    // 타입 체크
+    @Column({nullable: true })
+    location: string;
     
     @Column({ nullable: true })
     imageUrn: string;
