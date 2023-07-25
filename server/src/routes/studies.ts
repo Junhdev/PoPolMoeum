@@ -12,7 +12,7 @@ import Study from "../entities/Study";
 
 
 const createStudy = async (req: Request, res: Response, next) => {
-    const { name, title, date, startedAt, endedAt, description } = req.body;
+    const { name, title, date, startedAt, endedAt, description, location} = req.body;
 
     // user정보가 있다면 study의 이름과 제목이 study 엔티티에 이미 존재 하는 지 여부 체크
     try{
@@ -45,6 +45,7 @@ const createStudy = async (req: Request, res: Response, next) => {
         study.startedAt = startedAt;
         study.endedAt = endedAt;
         study.description = description;
+        study.location = location;
       
         await study.save();
         return res.json(study);
