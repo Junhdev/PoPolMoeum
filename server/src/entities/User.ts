@@ -3,6 +3,8 @@ import { IsEmail, Length } from "class-validator";
 import { Entity, Column, Index, OneToMany, BeforeInsert } from "typeorm";
 import bcrypt from 'bcryptjs';
 import { Expose } from "class-transformer";
+import Work from "./Work";
+import Like from "./Like";
 
 @Entity("users")
 export class User extends BaseEntity {
@@ -30,8 +32,8 @@ export class User extends BaseEntity {
     profileImg: string;
 
     
-    @OneToMany(() => Post, (post) => post.user)
-    posts: Post[];
+    @OneToMany(() => Work, (work) => work.user)
+    works: Work[];
 
     
     @OneToMany(() => Like, (like) => like.user)
@@ -43,6 +45,7 @@ export class User extends BaseEntity {
 
     @OneToMany(() => Crew, (crew) => crew.user_id)
     friendship: Crew[];
+    
 
     @BeforeInsert()
     async hashPassword() {

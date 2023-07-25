@@ -1,23 +1,13 @@
 import BaseEntity from './Entity';
 import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm";
 import { User } from './User';
-import Post from './Post';
 import { Expose } from "class-transformer";
+import Work from './Work';
 
 @Entity("studies")
 export default class Study extends BaseEntity{
 
-    /* Many to One */
-    @ManyToOne(()=>University)
-    @JoinColumn({ name: "username", referencedColumnName: "username" }) 
-    university: University;
-
-
-     
-    @OneToOne(() => Major, (major) => major.community)
-    major: Major;
-
-    
+  
     @Index()
     @Column({ nullable: true })
     name: string;
@@ -38,17 +28,18 @@ export default class Study extends BaseEntity{
     @Column({ nullable: true })
     bannerUrn: string;
 
+    /* 현재 스터디에 속해있는 user column (FK?) */
     @Column({ nullable: true })
-    username: string;
+    user_id: number;
 
 
     @ManyToOne(()=>User)
-    @JoinColumn({ name: "username", referencedColumnName: "username" }) // 첫번째 username은 22번 line, 두번째 username은 User.ts이 username
+    @JoinColumn({ name: "user_id", referencedColumnName: "user_id" }) 
     user: User;
 
    
-    @OneToMany(() => Post, (post) => post.study)
-    posts: Post[]
+    @OneToMany(() => Work, (work) => work.study)
+    works: Work[]
 
     /* class-transformer 사용 */
     @Expose()
