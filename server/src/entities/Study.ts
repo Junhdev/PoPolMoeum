@@ -3,6 +3,7 @@ import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, OneToOne } fro
 import { User } from './User';
 import { Expose } from "class-transformer";
 import Work from './Work';
+import Membership from './Membership';
 
 @Entity("studies")
 export default class Study extends BaseEntity{
@@ -40,6 +41,9 @@ export default class Study extends BaseEntity{
    
     @OneToMany(() => Work, (work) => work.study)
     works: Work[]
+
+    @OneToMany(() => Membership, (membership) => membership.study)
+    membership: Membership[]
 
     /* class-transformer 사용 */
     @Expose()
