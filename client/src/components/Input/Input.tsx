@@ -1,7 +1,6 @@
 import React, {
     forwardRef,
-    DetailedHTMLProps,
-    InputHTMLAttributes,
+    ForwardedRef,
 } from 'react'
 import classNames from 'classnames'
   
@@ -15,47 +14,32 @@ export type InputProps = {
     type?: InputType;
     size?: InputSize;
     className?: string;
-} & Omit<
-    DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>,
-    'size'
->;
+} & React.ComponentPropsWithoutRef<'input'>;
+
   
 const sizeMap: { [key in InputSize]: string } = {
     medium: 'p-3 text-base',
     large: 'p-4 text-base',
 }
   
-export const Input = forwardRef<HTMLInputElement, InputProps>(
-    (
-      {
-        id,
-        name,
-        label,
-        type = 'text',
-        size = 'medium',
-        className = '',
-        placeholder,
-        ...props
-      },
-      ref,
-    ) => {
+const Input = forwardRef(function Input(props: InputProps, ref: ForwardedRef<HTMLInputElement>) {
+    const { name, label, type, placeholder, className, ...rest } = props;
       return (
         <input
-          id={id}
-          name={name}
           ref={ref}
-          type={type}
+          name={name}
           aria-label={label}
+          type={type}
           placeholder={placeholder}
           className={classNames([
             'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm',
-            sizeMap[size],
-            className,
+             sizeMap[size],
+             className,
           ])}
-          {...props}
+          {...rest}
         />
       )
     },
   )
   
-Input.displayName = 'input'
+export default Input;
