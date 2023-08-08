@@ -1,24 +1,18 @@
-'use client';
-
-import { ButtonHTMLAttributes, ReactNode } from 'react';
-
+'use client'
+import { ButtonHTMLAttributes, ReactNode } from 'react'
+import { ButtonStyled } from "./style";
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-    children?: ReactNode;
-    className?: string;
-    onClick?: () => void;
-} 
+  color?: 'red' | 'blue' | 'grey' | 'white';
+  size?: 'xsmall' | 'small' | 'medium' | 'large' ;
+  disabled?: boolean;
+  className?: string;
+  children?: ReactNode;
+}
 
-const Button = ({   
-    children,
-    className,
-    onClick,
-    ...rest
-}: ButtonProps) => {
-    return (
-        <button className={className} onClick={onClick} {...rest}>
-            <div>{children}</div>
-        </button>
-    );
-};
-
-export default Button;
+export const Button = ({ className, children, ...rest }: ButtonProps) => {
+  return (
+    <ButtonStyled className={className} {...rest}>
+      {children}
+    </ButtonStyled>
+  );
+}
