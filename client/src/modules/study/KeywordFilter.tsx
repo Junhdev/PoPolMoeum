@@ -1,40 +1,41 @@
 'use client';
 
 import Dropdown from '@/components/Dropdown';
-import { careerListState, keywordListState, keywordsFilterState, universityListState } from '@/store/keyword';
+import { keywordListState, keywordsFilterState, selectedCareerState, selectedUniversityState } from '@/store/keyword';
 import { useCallback } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 // 모바일 대응
 
 const KeywordFilter = () => {
+
     // 실제 데이터
     // const { data: keywords } = useSWR(getKeywords);
     // 임시 데이터
     //let keywords = [{universityId: 1, universityName: '광운대학교', careers:[{careerId: 1, careerName: '개발'}, {careerId: 2,careerName:'디자인'}]},
     //{universityId: 2, universityName: '숭실대학교', careers:[{careerId: 3, careerName: '마케팅'}, {careerId: 4,careerName:'인사'}]}]
-    // data[{universityId: 1, universityName: '광운대학교'},{universityId: 2, universityName:'숭실대학교'}]
-    const setUniversityId = useSetRecoilState(universityListState)
-    const setCareerId  = useSetRecoilState(careerListState)
+    
+    const [selectedUniversityId, setSelectedUniversityId] = useRecoilState(selectedUniversityState)
+    const [selectedCareerId, setSelectedCareerId] = useRecoilState(selectedCareerState)
     const keywords = useRecoilValue(keywordListState);
     const {
-      selectedUniversity,
-      selectedCareer
+      selectedUniversityData,
+      selectedCareerData
     } = useRecoilValue(keywordsFilterState);
 
     // Why
     const handleSelectUniversity = useCallback(
     (universityId: number) => {
-      setUniversityId(universityId);
+      setSelectedUniversityId(universityId);
     },
-    [setUniversityId]
+    [setSelectedUniversityId]
     );
 
   const handleSelectCareer = useCallback(
     (careerId: number) => {
-      setCareerId(careerId);
+      setSelectedCareerId(careerId);
     },
-    [setCareerId]
+    [setSelectedCareerId]
   );
 
   return (
@@ -44,9 +45,13 @@ const KeywordFilter = () => {
         <div className=''>
           <Dropdown className=''>
             <Dropdown.Button disabled={keywords.length <= 0} color="red" size="small" placeholder="전체 대학교">
-              {selectedUniversity?.universityName}
+              {selectedUniversityData?.universityName}
             </Dropdown.Button>
-            <Dropdown.Menu selectable selectedItemKey={selectedUniversity?.universityId} onSelectChange={handleSelectUniversity}>
+            <Dropdown.Menu 
+              selectable 
+              onSelectChange={handleSelectUniversity} 
+              selectedItemKey={selectedUniversityId}
+            >
               {keywords.map(({ universityId, universityName }, idx) => (
                 <Dropdown.Item key={idx} itemKey={universityId}>
                   <div /*className={styles.itemText}*/>
@@ -68,15 +73,15 @@ const KeywordFilter = () => {
           </Dropdown>
           <Dropdown className="w-full">
             {/* 대학교를 선택해야만 직무를 선택할 수 있음 */ }
-            <Dropdown.Button color="red" size="small" placeholder="전체 직무" disabled={!selectedUniversity}>
-              {selectedCareer?.careerName}
+            <Dropdown.Button color="red" size="small" placeholder="전체 직무" disabled={!selectedUniversityData}>
+              {selectedCareerData?.careerName}
             </Dropdown.Button>
             <Dropdown.Menu
               selectable
-              selectedItemKey={selectedCareer?.careerId}
               onSelectChange={handleSelectCareer}
+              selectedItemKey={selectedCareerId}
             >
-              {selectedUniversity?.careers.map(({ careerId, careerName }, idx) => (
+              {selectedUniversityData?.careers.map(({ careerId, careerName }, idx) => (
                 <Dropdown.Item key={idx} itemKey={careerId}>
                   <div>
                     {careerName}
