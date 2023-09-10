@@ -1,26 +1,31 @@
 'use client'
 
 import { HTMLAttributes } from "react";
-import { Control, Controller, FieldPath, FieldValues } from "react-hook-form";
+import { Control, Controller, DeepMap, FieldError, FieldPath, FieldValues } from "react-hook-form";
 import Dropdown from "../Dropdown";
+import { ErrorMessage } from "@hookform/error-message";
+import { InputErrorMessage } from "./InputErrorMessage";
+import _ from "lodash";
 
 type TControl<T extends FieldValues> = {
     control: Control<T>;
     /** Input을 구분짓는 고유한 이름입니다. 한 폼안에는 오직 하나의 이름만이 존재해야 합니다. name을 전달해야 form validation이 가능합니다. */
     name: FieldPath<T>;
-    /**  유효성검사에서 해당 Input이 invalid할 경우 error message의 표시 여부를 설정합니다. @default true*/
-    showError?: boolean;
     /** Dropdown 아이템의 리스트입니다. */
     selections?: number[];
     /** 모바일 BottomSheet DropDown에 해당하는 타이틀입니다. */
     title?: string;
+    errors?: Partial<DeepMap<T, FieldError>>
   } & HTMLAttributes<HTMLDivElement>;
   
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const InputDropdown = ({ ...props }: TControl<any>) => {
-    const { name, control, placeholder, showError = true, selections = ['default'], title } = props;
-    const mobile = useIsMobile();
-  
+    // errors는 Form컴포넌트에서 받아온 props(InputDropdown 컴포넌트가 결국 Form컴포넌트의 child컴포넌트이므로 !)
+    const { name, control, placeholder,  selections = ['default'], errors } = props;
+    //const mobile = useIsMobile();
+    const errorMessages = _.get(errors, name)
+    // const hasError = !!(errors && errorMessages)
+
     return (
       <div className='relative grid items-center'>
         <Controller
@@ -60,13 +65,20 @@ type TControl<T extends FieldValues> = {
                     </Dropdown.Item>
                   ))}
                 </Dropdown.Menu>
-              )}
             </Dropdown>
           )}
         />
-        <InputErrorMessage name={name} showError={showError} />
+        <ErrorMessage
+            errors={errors}
+            name={name as any}
+            render={({ message }) => (
+            <InputErrorMessage className="mt-1">{message}</InputErrorMessage>
+            )}
+        />
       </div>
     );
   };
   
   export default InputDropdown;
+
+  
