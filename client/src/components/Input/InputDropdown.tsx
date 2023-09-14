@@ -12,7 +12,7 @@ type TControl<T extends FieldValues> = {
     /** Input을 구분짓는 고유한 이름입니다. 한 폼안에는 오직 하나의 이름만이 존재해야 합니다. name을 전달해야 form validation이 가능합니다. */
     name: FieldPath<T>;
     /** Dropdown 아이템의 리스트입니다. */
-    selections?: number[];
+    selections?: Array<T>;
     /** 모바일 BottomSheet DropDown에 해당하는 타이틀입니다. */
     title?: string;
     errors?: Partial<DeepMap<T, FieldError>>
@@ -24,7 +24,7 @@ type TControl<T extends FieldValues> = {
     const { name, control, placeholder,  selections = ['default'], errors } = props;
     //const mobile = useIsMobile();
     const errorMessages = _.get(errors, name)
-    // const hasError = !!(errors && errorMessages)
+    const hasError = !!(errors && errorMessages)
 
     return (
       <div className='relative grid items-center'>
@@ -36,7 +36,7 @@ type TControl<T extends FieldValues> = {
             <Dropdown>
               <Dropdown.Button
                 type="button"
-                isError={Boolean(fieldState.error)}
+                isError={hasError}
                 placeholder={placeholder}
                 style={{ width: '100%' }}
               >
@@ -58,10 +58,11 @@ type TControl<T extends FieldValues> = {
                   ))}
                 </Dropdown.BottomSheet>
                   ) : ( */}
+                  {/* value 작동 원리 체크 */}
                 <Dropdown.Menu selectable selectedItemKey={value} onSelectChange={onChange}>
-                  {selections.map((v) => (
-                    <Dropdown.Item key={v} itemKey={v}>
-                      {v}
+                  {selections.map(({ id, name, ...props }, idx) => (
+                    <Dropdown.Item key={idx} itemKey={id}>
+                      {name}
                     </Dropdown.Item>
                   ))}
                 </Dropdown.Menu>
