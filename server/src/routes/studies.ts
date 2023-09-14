@@ -1,3 +1,4 @@
+/*
 import { Router, Request, Response, NextFunction } from "express";
 import userMiddleware from '../middlewares/user';
 import authMiddleware from '../middlewares/auth';
@@ -211,3 +212,4 @@ router.post(
     uploadstudyImage
 );
 export default router;
+*/
