@@ -2,31 +2,54 @@ import BaseEntity from './Entity';
 import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm";
 import { User } from './User';
 import { Expose } from "class-transformer";
-import Work from './Work';
+import Work from './Task';
 import Membership from './Membership';
+import Task from './Task';
 
 @Entity("studies")
 export default class Study extends BaseEntity{
 
     @Index()
     @Column({ nullable: true })
-    superuser_id: number;
-  
+    superuserId: number;
+    
+    // 스터디 참여 조건 -> 해당 대학의 학우들만 참여 가능
+    @Column({nullable: true })
+    universityId: number;
+
+    @Column({nullable: true })
+    subjectId: number;
+
     @Index()
     @Column({ nullable: true })
     name: string;
 
-    
     @Column({nullable: true })
     title: string;
-
     
     @Column({ type: 'text', nullable: true })
     description: string;
 
-    // 타입 체크
+    // 지원마감일
     @Column({nullable: true })
-    location: string;
+    applyDeadline: Date;
+
+    // 모집인원
+    @Column({nullable: true })
+    applyNumberOfMember: number;
+
+    // 온오프라인 방식  
+    @Column({nullable: true })
+    way: string;
+    
+    // 오프라인일경우 장소   
+    @Column({nullable: true })
+    place: string;
+    
+    // 주 ?일
+    @Column({nullable: true })
+    frequency: number;
+   
     
     @Column({ nullable: true })
     imageUrn: string;
@@ -35,20 +58,21 @@ export default class Study extends BaseEntity{
     @Column({ nullable: true })
     bannerUrn: string;
 
-    /* 현재 스터디에 속해있는 user column (FK?) */
+    /* 현재 스터디에 속해있는 user column (FK?) 
     @Column({ nullable: true })
-    user_id: number;
-
+    userId: number;
+    */
 
     @ManyToOne(()=>User)
-    @JoinColumn({ name: "user_id", referencedColumnName: "user_id" }) 
-    user: User;
+    @JoinColumn({ name: "userId", referencedColumnName: "id" }) 
+    userId: number;
 
    
-    @OneToMany(() => Work, (work) => work.study)
-    works: Work[]
+    @OneToMany(() => Task, (task) => task.study)
+    tasks: Task[]
 
-    @OneToMany(() => Membership, (membership) => membership.study)
+    // 모집인원 나타낼때 ? / 6 이런식으로 이용
+    @OneToMany(() => Membership, (membership) => membership.studyId)
     membership: Membership[]
 
     /* class-transformer 사용 */
