@@ -146,9 +146,11 @@ const Panel = ({ children, className }: PopoverPanelProps) => {
   )
 }
 
+// Fix: key props 체크
 interface Props extends LiHTMLAttributes<HTMLLIElement> {
   href?: string
   onClick?: () => void
+  key: number
 }
 
 const PopoverItem = ({ children, href, onClick }: Props) => {
