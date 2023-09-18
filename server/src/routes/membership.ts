@@ -23,11 +23,10 @@ const sendStudyRequest = async(req: Request, res: Response) => {
     // 내가 생성자한테 참여요청 보냈을때
     const studyRequest = await Membership.find({
     
-      where: [{    
+      where: {    
           receiverId: study.superuserId, 
           senderId: user.id
-        }
-      ]
+      }
     })
     
     // 해당 생성자한테 보낸 참여요청이 기존에 없었다면
@@ -178,9 +177,11 @@ const removeStudy =  async(req: Request, res: Response) => {
     })
   
     // ★★★동기적 프로그래밍으로 인해 코드 위치 중요
+    
     if(studyApplications.length === 0){
       return res.status(404).json({ message: '보낸 참여신청이 없어요' })
     }
+    
    
    // 로직 체크
    // 수락했으면 사라진다
@@ -195,9 +196,50 @@ const removeStudy =  async(req: Request, res: Response) => {
         membership: {
           senderId: user.id,
           accepted: false
-        }
+        },
+        
     }})
       return res.json(applyingStudy); 
+  
+  } catch {
+    return res.status(500).json({ message: '서버 에러가 발생했어요.' });
+  }
+  };
+
+
+  // 보낸 참여 신청중 수락된 신청 (스터디 정보 return)
+  const getAcceptedStudy = async(req: Request, res: Response) => {
+    const user: User = res.locals.user;
+   
+  try {
+    
+    const studyApplications = await Membership.find({
+      
+      where: {
+          senderId: user.id, accepted: true
+        }
+      
+    })
+  
+    // ★★★동기적 프로그래밍으로 인해 코드 위치 중요
+    
+    if(studyApplications.length === 0){
+      return res.status(404).json({ message: '수락된 참여신청이 없어요' })
+    }
+    
+
+    const acceptedStudy = await Study.find({
+      relations: {
+        membership: true
+      }
+      ,
+      where: {
+        membership: {
+          senderId: user.id,
+          accepted: true
+        },
+    }})
+      return res.json(acceptedStudy); 
   
   } catch {
     return res.status(500).json({ message: '서버 에러가 발생했어요.' });
@@ -226,6 +268,7 @@ const getMyStudyList = async(req: Request, res: Response) => {
                         accepted: true
                     }
                 },
+                // 생성자가 나일때
                 {
                     superuserId: user.id
                 }
@@ -260,6 +303,8 @@ router.delete('/accept/:friend_id', userMiddleware, removeStudy);
 router.get('/', userMiddleware, getMyStudyList);
 router.get('/request', userMiddleware, getStudyRequests);
 router.get('/apply', userMiddleware, getApplyingStudy);
+router.get('/accept', userMiddleware, getAcceptedStudy);
+
 
 export default router;
 
