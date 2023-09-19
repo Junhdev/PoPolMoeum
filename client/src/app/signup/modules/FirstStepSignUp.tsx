@@ -18,7 +18,7 @@ export const passwordReg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/
 
 // multi step 으로 ( 마이페이지의 관심 카테고리와 연결 !
 // ex) 아이콘으로!! 관심 분야를 선택해주세요.. 추후 이 관심분야를 바탕으로 추천 분야 스터디!)
-const SignUp = () => {
+const FirstStepSignUp = () => {
     const router = useRouter();
     const { authenticated } = useAuthState();
 
@@ -112,8 +112,5 @@ const SignUp = () => {
     
     }
     
-   
 
-   
-
-export default SignUp;
+export default FirstStepSignUp;
