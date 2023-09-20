@@ -17,17 +17,17 @@ const mapError = (errors: Object[]) => {
 
   
 const signup =  async (req: Request, res: Response) => {
-    const { userId, email, username, password, university, major } = req.body;
+    const { user_id, email, username, password, universityId, majorId, interestedSubjectTag } = req.body;
   
     try { 
         let errors: any = {};
     
         // 유저아이디, 이메일, 유저이름이 이미 사용되고 있는 것인지 검사
-        const userIdOfUser = await User.findOneBy({ userId });
+        const user_idOfUser = await User.findOneBy({ user_id });
         const emailOfUser = await User.findOneBy({ email });
         const usernameOfUser = await User.findOneBy({ username });
           
-        if (userIdOfUser) errors.email = "이미 해당 이메일 주소가 사용되었습니다.";
+        if (user_idOfUser) errors.user_id = "이미 해당 이메일 주소가 사용되었습니다.";
         if (emailOfUser) errors.email = "이미 해당 이메일 주소가 사용되었습니다.";
         if (usernameOfUser) errors.username = "이미 이 사용자 이름이 사용되었습니다.";
     
@@ -36,12 +36,13 @@ const signup =  async (req: Request, res: Response) => {
         }
     
         const user = new User();
-        user.userId = userId;
+        user.user_id = user_id;
         user.email = email;
         user.username = username;
         user.password = password;
-        user.university = university;
-        user.major = major;
+        user.universityId = universityId;
+        user.majorId = majorId;
+        user.interestedsubjectTag = interestedSubjectTag
     
         // 엔티티에서 정해 놓은 조건으로 user데이터의 유효성 검사 해주기
         errors = await validate(user);
