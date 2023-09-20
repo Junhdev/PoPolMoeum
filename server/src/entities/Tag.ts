@@ -5,9 +5,9 @@ import Task from "./Task";
 
 
 @Entity('tags')
-export default class Like extends BaseEntity{
+export default class Tag extends BaseEntity{
     @Column({ nullable: true })
-    name: string;
+    name: string[];
 
     @Column({ nullable: true })
     status: number;
