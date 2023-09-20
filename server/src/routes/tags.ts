@@ -1,29 +1,35 @@
 import { Request, Response, Router } from "express";
+import Tag from "../entities/Tag";
 
 
 
-const getTagList =  async (req: Request, res: Response) => {
-    const { userId, email, username, password, university, major } = req.body;
+const getTagList = async (req: Request, res: Response) => {
   
     try { 
-       
-        await user.save(); 
-        return res.json(user);
+        const tag = await Tag.findOneBy({});
+        return res.json(tag);
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error });
-      } 
+    } 
 }  
 
 const saveTagList = async (req: Request, res: Response) => {
-  const { userId, username, password } = req.body;
-  try {
-   
-    return res.json({ user, token });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json(error);
-  }
+    const inputTag = req.body;
+    try {
+        //const user: User = res.locals.user;
+        // 업데이트 시켜주기
+        const tag = await Tag.findOneBy({});
+        tag.name = inputTag
+        
+      
+        await Tag.save(tag);
+        return res.json(tag);
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error: "문제가 발생했습니다" });
+    }    
 };
 
 
