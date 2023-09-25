@@ -9,10 +9,16 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children?: ReactNode;
 }
 
-export const Button = ({ className, children, ...rest }: ButtonProps) => {
+export const Button = ({ color, size, className, children, disabled, onClick, ...rest }: ButtonProps) => {
   return (
-    <ButtonStyled className={className} {...rest}>
+    <ButtonStyled color={color} size={size} className={className}>
+      <button
+        {...rest}
+        disabled={disabled}
+        onClick={onClick}
+      >
       {children}
+    </button>
     </ButtonStyled>
   );
 }
