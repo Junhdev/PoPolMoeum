@@ -17,7 +17,7 @@ const mapError = (errors: Object[]) => {
 
   
 const signup =  async (req: Request, res: Response) => {
-    const { user_id, email, username, password, universityId, majorId, interestedSubjectTag } = req.body;
+    const { user_id, email, username, password, universityName, grade, major, interestedSubjects } = req.body;
   
     try { 
         let errors: any = {};
@@ -40,9 +40,10 @@ const signup =  async (req: Request, res: Response) => {
         user.email = email;
         user.username = username;
         user.password = password;
-        user.universityId = universityId;
-        user.majorId = majorId;
-        user.interestedsubjectTag = interestedSubjectTag
+        user.universityName = universityName;
+        user.grade = grade;
+        user.major = major;
+        user.interestedSubjects = interestedSubjects
     
         // 엔티티에서 정해 놓은 조건으로 user데이터의 유효성 검사 해주기
         errors = await validate(user);
@@ -58,25 +59,24 @@ const signup =  async (req: Request, res: Response) => {
 }  
 
 const login = async (req: Request, res: Response) => {
-  const { userId, username, password } = req.body;
+  const { user_id, password } = req.body;
   try {
     let errors: any = {};
     // 비워져있다면 에러를 프론트엔드로 보내주기
     // isEmpty from class-validator
-    if (isEmpty(userId)) errors.userId = "사용자 아이디는 비워둘 수 없습니다.";
-    if (isEmpty(username)) errors.username = "사용자 이름은 비워둘 수 없습니다.";
+    if (isEmpty(user_id)) errors.user_id = "사용자 아이디는 비워둘 수 없습니다.";
     if (isEmpty(password)) errors.password = "비밀번호는 비워둘 수 없습니다.";
     if (Object.keys(errors).length > 0) {
       return res.status(400).json(errors);
     }
 
     // DB에서 유저 찾기
-    const user = await User.findOneBy({ userId });
+    const user = await User.findOneBy({ user_id });
 
     if (!user)
       return res
         .status(404)
-        .json({ userID: "사용자 아이디가 등록되지 않았습니다." });
+        .json({ user_id: "사용자 아이디가 등록되지 않았습니다." });
 
     // 유저가 있다면 비밀번호 비교하기
     // user.password는 DB에 저장되어 있는 암호화 되어 있는 비밀번호 , password는 client에서 user가 입력한 비밀번호
@@ -88,7 +88,7 @@ const login = async (req: Request, res: Response) => {
     }
 
     // 비밀번호가 맞다면 username과 JWT_SECRET을 합쳐서 토큰 생성
-    const token = jwt.sign({ userId }, process.env.JWT_SECRET);
+    const token = jwt.sign({ user_id }, process.env.JWT_SECRET);
 
     // 쿠키저장
     res.set(
