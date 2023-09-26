@@ -1,11 +1,26 @@
 const express = require('express');
 
 import { AppDataSource } from "./data-source";
+import authRoutes from './routes/auth';
+//import studyRoutes from './routes/studies';
+//import postRoutes from './routes/posts';
+//import likeRoutes from './routes/likes';
+//import userRoutes from './routes/users';
+import membershipRoutes from './routes/membership';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 
 
 const app = express();
-
-
+const origin = process.env.ORIGIN;
+app.use(cors({
+    origin,
+    credentials: true,
+    optionsSuccessStatus: 200
+}))
+dotenv.config();
+app.use(cookieParser());
 
 // 서로 다른 ORIGIN에서 cookie에 token 저장을 위해 백엔드에서 credentials: true 설정 필요
 
@@ -16,8 +31,15 @@ app.use(express.urlencoded({ extended: true }));
 /* HTTP 요청에 대한 log를 남겨주는 미들웨어 */
 
 
-
 app.get("/", (_, res) => res.send("running"));
+// 해당 경로로 접근하면 해당 Routes로 이동
+app.use("/api/auth", authRoutes);
+//app.use("/api/studies", studyRoutes);
+app.use("/api/membership", membershipRoutes);
+
+//app.use("/api/likes", likeRoutes);
+//app.use("/api/users", userRoutes);
+
 
 
 // static파일을 public 파일 안에 있고 브라우저로 접근할 때 제공할 수 있게 해줌
