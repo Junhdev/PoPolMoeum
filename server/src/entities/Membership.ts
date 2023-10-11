@@ -6,21 +6,28 @@ import Study from "./Study";
 
 @Entity("membership")
 export default class Membership extends BaseEntity{
-    
+    /*
     @Column({ nullable: true })
-    study_id: number 
-
+    studyId: number 
+    */
+    
+    // join된 column name이 studyId로 적용되는지 체크
     @ManyToOne(()=>Study, (study) => study.membership)
-    @JoinColumn({ name: "study_id", referencedColumnName: "study_id" }) 
-    study: Study 
+    @JoinColumn({ name: "studyId", referencedColumnName: "id" }) 
+    studyId: number
+
+    //초대요청은 한개의 userId를 가져야한다. (senderId)
+    @ManyToOne(()=>User, (user) => user.membership)
+    @JoinColumn({ name: "userId", referencedColumnName: "id" }) 
+    userId: number
 
     @Column({ nullable: true })
-    sender_id: number 
+    senderId: number 
     
     @Column({ nullable: true })
-    receiver_id: number;
+    receiverId: number;
     
-    @Column()
+    @Column({ nullable: true })
     accepted: boolean;
 
     @CreateDateColumn()
