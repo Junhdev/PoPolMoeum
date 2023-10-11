@@ -1,17 +1,14 @@
 import BaseEntity from "./Entity";
 import { IsEmail, Length } from "class-validator";
-import { Entity, Column, Index, OneToMany, BeforeInsert } from "typeorm";
+import { Entity, Column, Index, OneToMany, BeforeInsert, ManyToMany } from "typeorm";
 import bcrypt from 'bcryptjs';
 import { Expose } from "class-transformer";
-import Work from "./Task";
 import Like from "./Like";
 import Membership from "./Membership";
+import Task from "./Task";
+import Study from "./Study";
 
-type Subject = {
-    id:
-    name:
-    
-}
+
 @Entity("users")
 export class User extends BaseEntity {
     @Index()
@@ -35,23 +32,34 @@ export class User extends BaseEntity {
     password: string;
 
     @Column({ nullable: true })
-    universityId: number;
+    universityName: string;
 
     @Column({ nullable: true })
-    majorId: number;
+    major: string;
 
-    // 회원가입할때 선택 -> recoil 이용
     @Column({ nullable: true })
-    interstingSubject: Subject[];
+    grade: string;
+
+    
+    @Column({ type: 'text', array: true, nullable: true  })
+    interestedSubjects: any[];
 
     @Column({ nullable: true })
     profileImg: string;
 
-    @OneToMany(() => Work, (work) => work.user)
-    works: Work[];
+    @OneToMany(() => Task, (task) => task.user)
+    tasks: Task[];
 
     @OneToMany(() => Like, (like) => like.user)
     likes: Like[];
+
+    // 유저는 여러개의 스터디에 참여할 수 있다
+    @ManyToMany(()=>Study)
+    study: Study[];
+
+     /* 1명의 User가 여러개의 초대요청을 가질 수 있다 */
+     @OneToMany(() => Membership, (membership) => membership.userId)
+     membership: Membership[];
 
     @BeforeInsert()
     async hashPassword() {
