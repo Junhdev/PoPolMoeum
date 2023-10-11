@@ -1,5 +1,5 @@
 import BaseEntity from './Entity';
-import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToMany, ManyToOne, OneToMany, OneToOne } from "typeorm";
 import { User } from './User';
 import { Expose } from "class-transformer";
 import Work from './Task';
@@ -67,6 +67,10 @@ export default class Study extends BaseEntity{
     @JoinColumn({ name: "userId", referencedColumnName: "id" }) 
     userId: number;
 
+    // 스터디에는 여러명의 유저가 참여할 수 있다
+    // Fix !
+    @ManyToMany(()=>User)
+    members: User[];
    
     @OneToMany(() => Task, (task) => task.study)
     tasks: Task[]
