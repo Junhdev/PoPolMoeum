@@ -15,12 +15,12 @@ export default class Study extends BaseEntity{
     
     // 스터디 참여 조건 -> 해당 대학의 학우들만 참여 가능
     @Column({nullable: true })
-    universityId: number;
+    universityName: string;
 
-    @Column({nullable: true })
-    subjectId: number;
+    @Column({ type: 'text', array: true, nullable: true  })
+    subjects: any[];
 
-    @Index()
+
     @Column({ nullable: true })
     name: string;
 
@@ -40,17 +40,13 @@ export default class Study extends BaseEntity{
 
     // 온오프라인 방식  
     @Column({nullable: true })
-    way: string;
+    frequency: string;
     
     // 오프라인일경우 장소   
     @Column({nullable: true })
-    place: string;
+    location: string;
     
-    // 주 ?일
-    @Column({nullable: true })
-    frequency: number;
    
-    
     @Column({ nullable: true })
     imageUrn: string;
 
