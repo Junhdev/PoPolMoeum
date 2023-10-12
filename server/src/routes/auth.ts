@@ -22,14 +22,14 @@ const signup =  async (req: Request, res: Response) => {
     try { 
         let errors: any = {};
     
-        // 유저아이디, 이메일, 유저이름이 이미 사용되고 있는 것인지 검사
+        // 유저아이디, 이메일 이미 사용되고 있는 것인지 검사
         const user_idOfUser = await User.findOneBy({ user_id });
         const emailOfUser = await User.findOneBy({ email });
-        const usernameOfUser = await User.findOneBy({ username });
-          
+        
+      
         if (user_idOfUser) errors.user_id = "이미 해당 이메일 주소가 사용되었습니다.";
         if (emailOfUser) errors.email = "이미 해당 이메일 주소가 사용되었습니다.";
-        if (usernameOfUser) errors.username = "이미 이 사용자 이름이 사용되었습니다.";
+       
     
         if (Object.keys(errors).length > 0) {
           return res.status(400).json(errors);
