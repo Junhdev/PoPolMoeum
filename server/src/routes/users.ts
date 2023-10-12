@@ -1,7 +1,8 @@
+/*
 import { Request, Response, Router } from "express";
 import { User } from "../entities/User";
 import userMiddleware from "../middlewares/user";
-import Work from "../entities/Work";
+import Work from "../entities/Task";
 
 const getUserData = async (req: Request, res: Response) => {
   try {
@@ -17,6 +18,7 @@ const getUserData = async (req: Request, res: Response) => {
       where: { user_id: user.id },
       relations: ["likes", "study"],
     });
+    
 
 
     if (res.locals.user) {
@@ -50,3 +52,4 @@ const router = Router();
 router.get("/:user_ID", userMiddleware, getUserData);
 
 export default router;
+*/
