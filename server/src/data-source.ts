@@ -6,6 +6,9 @@ import Study from "./entities/Study"
 import Like from "./entities/Like"
 import Membership from "./entities/Membership"
 import Task from "./entities/Task"
+import Post from "./entities/Post"
+import Vote from "./entities/Vote"
+import Comment from "./entities/Comment"
 
 
 
@@ -22,7 +25,7 @@ export const AppDataSource = new DataSource({
     //entities: [
        // "src/entities/**/*.ts"
     //],
-    entities:[Entity, User, Task, Study, Like, Membership],
+    entities:[Entity, User, Task, Study, Like, Membership, Post, Vote, Comment],
     migrations: [],
     subscribers: [],
 })
