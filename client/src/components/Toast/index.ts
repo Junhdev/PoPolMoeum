@@ -6,6 +6,7 @@ import { Toast } from './Toast'
 
 
 export interface OpenToastOptionProps {}
+
 export const openToast = (
   message: string,
   disappearTime: number = 2000,
