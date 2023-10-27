@@ -1,3 +1,5 @@
+'use client'
+
 import axios from "axios";
 import { createContext, useContext, useEffect, useReducer } from "react";
 //import { User } from "../types";
@@ -63,7 +65,7 @@ const reducer = (state: State, { type, payload }: Action) => {
     }
 }
 
-// _app.tsx에서 <Component> 감싸주어야함
+
 export const AuthProvider = ({children}: { children: React.ReactNode }) => {
 
     const [state, defaultDispatch] = useReducer(reducer, {
