@@ -1,8 +1,14 @@
-import './globals.css'
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+'use client'
 
-const inter = Inter({ subsets: ['latin'] })
+import type { Metadata } from 'next'
+import RecoilProvider from '@/store/RecoilProvider'
+import Axios from 'axios'
+import { AuthProvider } from '@/context/auth'
+import GlobalStyles from '@/styles/GlobalStyles'
+import StyledComponentsRegistry from '@/lib/registry'
+import './globals.css'
+import { MultiStepFormProvider } from '@/components/Form/context/MultiStepFormContext'
+
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -14,9 +20,25 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  Axios.defaults.baseURL = process.env.NEXT_PUBLIC_SERVER_BASE_URL + "/api";
+  Axios.defaults.withCredentials = true;
+  
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body>
+      
+        
+          <AuthProvider>
+          <RecoilProvider>
+            <StyledComponentsRegistry>
+              <GlobalStyles />
+              {children}
+            </StyledComponentsRegistry>
+            </RecoilProvider>
+          </AuthProvider>
+        
+       
+        </body>
     </html>
   )
 }
