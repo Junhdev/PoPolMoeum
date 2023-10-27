@@ -1,25 +1,29 @@
+'use client'
+
 import {
     Dispatch,
     ReactNode,
     SetStateAction,
     createContext,
     useContext,
+    useMemo,
     useState,
   } from "react";
   
+ 
   interface MultiStepFormContextValue {
-    formData: any;
-    setFormData: Dispatch<SetStateAction<any>>;
+    stepFormData: any;
+    setStepFormData: Dispatch<SetStateAction<any>>;
     onHandleBack: () => void;
     onHandleNext: () => void;
     step: number;
   }
   
   const MultiStepFormContext = createContext<MultiStepFormContextValue>({
-    formData: {},
+    stepFormData: {},
     onHandleBack: () => {},
     onHandleNext: () => {},
-    setFormData: () => {},
+    setStepFormData: () => {},
     step: 0,
   });
   
@@ -27,8 +31,11 @@ import {
     children: ReactNode;
   }
   
-  const MultiStepFormContextProvider = ({ children }: IProps) => {
-    const [formData, setFormData] = useState();
+  
+ 
+  
+  export const MultiStepFormProvider = ({ children }: IProps) => {
+    const [stepFormData, setStepFormData] = useState({});
     const [step, setStep] = useState(1);
   
     function onHandleNext() {
@@ -38,21 +45,26 @@ import {
     function onHandleBack() {
       setStep((prev) => prev - 1);
     }
-  
+    
+    const contextValue = useMemo(
+      () => ({ stepFormData, setStepFormData, step, onHandleNext,  onHandleBack }),
+      [stepFormData, setStepFormData, step, onHandleNext,  onHandleBack],
+    );
+
+    
     return (
       <MultiStepFormContext.Provider
-        value={{ formData, setFormData, onHandleBack, onHandleNext, step }}
+        value={ contextValue }
       >
         {children}
       </MultiStepFormContext.Provider>
     );
   }
   
-  const useMultiStepFormContext = () => {
+  export const useMultiStepFormContext = () => {
     const ctx = useContext(MultiStepFormContext);
     if (!ctx)
-      throw new Error('Cannot find FormStepContext. It should be wrapped within FormStepContextProvider.');
+      throw new Error('Cannot find MultiStepFormContext. It should be wrapped within MultiStepFormContextProvider.');
     return ctx;
   }
  
-  export { MultiStepFormContextProvider, useMultiStepFormContext }
